@@ -36,13 +36,13 @@ public class EventController {
         // EventDto -> Event로 바꿔야함
         // @Validated 로 검증을하면 Errors나 BindingResult에 담을 수 있다
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
 
         eventValidator.validate(eventDto, errors);
 
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
 
         Event event = modelMapper.map(eventDto, Event.class);
