@@ -23,7 +23,7 @@ public class Event {
     private String location; // 없으면 온라인 모임
     private int basePrice;
     private int maxPrice;
-    private int LimitOfEnrollment;
+    private int limitOfEnrollment;
     private boolean offline;
     private boolean free;
     @Enumerated(EnumType.STRING)

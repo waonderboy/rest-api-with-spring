@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 public class EventDto {
     private String name;
     private String description;
-    private LocalDateTime beginEnrollmentDateTime;
-    private LocalDateTime closeEnrollmentDateTime;
+    private LocalDateTime beginEnrollDateTime;
+    private LocalDateTime closeEnrollDateTime;
     private LocalDateTime beginEventDateTime;
     private LocalDateTime endEventDateTime;
     private String location;
