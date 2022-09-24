@@ -35,6 +35,10 @@ public class EventController {
         // HATEOS가 제공하는 linkTo(), methodOn() 사용 -> uri 생성
         // EventDto -> Event로 바꿔야함
         // @Validated 로 검증을하면 Errors나 BindingResult에 담을 수 있다
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         eventValidator.validate(eventDto, errors);
 
         if (errors.hasErrors()) {
