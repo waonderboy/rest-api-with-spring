@@ -20,6 +20,7 @@ public class EventValidator{
         LocalDateTime beginEnrollDateTime = eventDto.getBeginEnrollDateTime();
         LocalDateTime closeEnrollDateTime = eventDto.getCloseEnrollDateTime();
 
+
         if (endEventDateTime.isBefore(beginEventDateTime)
                 || endEventDateTime.isBefore(beginEnrollDateTime)
                 || endEventDateTime.isBefore(closeEnrollDateTime)) {

@@ -3,6 +3,7 @@ package com.example.restapi.events;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -48,7 +49,15 @@ public class EventController {
         Event event = modelMapper.map(eventDto, Event.class);
         event.update(); // update free
         Event newEvent = eventRepository.save(event);
-        URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
-        return ResponseEntity.created(createdUri).body(event);
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());// location header
+        URI createdUri = selfLinkBuilder.toUri();
+        /**
+         * 리팩토링시 링크를 추가하는 코드는 EventResource에 추가하는게 좋다
+         * EventResource의 역할이기 때문
+         */
+        EventResource eventResource = new EventResource(event);
+        eventResource.add(linkTo(EventController.class).withRel("query-events"));
+        eventResource.add(selfLinkBuilder.withRel("update-event"));
+        return ResponseEntity.created(createdUri).body(eventResource);
     }
 }
