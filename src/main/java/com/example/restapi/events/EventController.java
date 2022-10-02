@@ -1,12 +1,15 @@
 package com.example.restapi.events;
 
+import com.example.restapi.common.ErrorsResource;
+import com.example.restapi.index.IndexController;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +27,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilderDslKt.with
 @RestController
 @RequestMapping(value = "/api/events", produces = MediaTypes.HAL_JSON_VALUE)
 @RequiredArgsConstructor
+@Slf4j
 public class EventController {
 
     private final EventRepository eventRepository;
@@ -40,13 +44,13 @@ public class EventController {
         // EventDto -> Event로 바꿔야함
         // @Validated 로 검증을하면 Errors나 BindingResult에 담을 수 있다
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return ResponseEntity.badRequest().body(badRequest(errors));
         }
 
         eventValidator.validate(eventDto, errors);
 
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return ResponseEntity.badRequest().body(badRequest(errors));
         }
 
         Event event = modelMapper.map(eventDto, Event.class);
@@ -63,5 +67,9 @@ public class EventController {
         eventResource.add(selfLinkBuilder.withRel("update-event"));
         eventResource.add(Link.of("/docs/index.html#resources-events-create", LinkRelation.of("profile")));
         return ResponseEntity.created(createdUri).body(eventResource);
+    }
+
+    private EntityModel<Errors> badRequest(Errors errors) {
+        return ErrorsResource.of(errors);
     }
 }
