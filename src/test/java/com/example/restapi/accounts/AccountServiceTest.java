@@ -1,6 +1,7 @@
 package com.example.restapi.accounts;
 
 import org.assertj.core.api.Assertions;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -27,6 +29,10 @@ class AccountServiceTest {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+
     /**
      * name 으로 찾은 인증 계정과 저장된 계정이 같아야함
      */
@@ -42,14 +48,14 @@ class AccountServiceTest {
                 .roles(Set.of(ADMIN, USER)) // 계층화 가능
                 .build();
 
-        accountRepository.save(account);
+        accountService.saveAccount(account);
 
         // When
         UserDetailsService userDetailsService = (UserDetailsService) accountService;
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         // Then
-        assertThat(userDetails.getPassword()).isEqualTo(password);
+        assertThat(passwordEncoder.matches(password, userDetails.getPassword()));
     }
 
     @Test
