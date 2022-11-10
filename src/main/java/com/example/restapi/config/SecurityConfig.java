@@ -1,6 +1,7 @@
 package com.example.restapi.config;
 
 import com.example.restapi.accounts.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -18,13 +19,11 @@ import org.springframework.util.PathMatcher;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    AccountService accountService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final AccountService accountService;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     @Override
@@ -55,14 +54,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 필터 적용 여부
      * 스프링 시큐리티 안에서 거름
      */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.anonymous()
-                .and()
-            .formLogin()
-                .and()
-            .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/api/**").authenticated()
-                .anyRequest().authenticated();
-    }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.anonymous()
+//                .and()
+//            .formLogin()
+//                .and()
+//            .authorizeRequests()
+//                .mvcMatchers(HttpMethod.GET, "/api/**").authenticated()
+//                .anyRequest().authenticated();
+//    }
 }

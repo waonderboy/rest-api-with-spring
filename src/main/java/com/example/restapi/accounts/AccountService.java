@@ -1,6 +1,8 @@
 package com.example.restapi.accounts;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -14,14 +16,13 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Service
+@RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
 
-    @Autowired
-    AccountRepository accountRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Account saveAccount(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
