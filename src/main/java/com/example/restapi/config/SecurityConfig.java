@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * AuthenticationManager 를 만드는 AuthenticationManager Builder
+     * AuthenticationManager 를 만드는 AuthenticationManager Builder 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g
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
